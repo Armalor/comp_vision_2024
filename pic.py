@@ -1,16 +1,20 @@
+# Исп
+import cv2
+import os
+
+img = cv2.imread('./data/road-signs/footpath.jpg')
+
+if img is None:
+    print('ФАЙЛ НЕ НАЙДЕН')
+    os._exit(1)
 
 
-pic = [0,0,0]
-
-img = list()
-
-for i in range(2):
-
-    line = list()
-    for idx in range(3):
-        line.append([0,0,0])
-
-    img.append(line)
+cv2.imshow('img', img)
 
 
-print(img)
+while True:
+    key = cv2.waitKey(1)
+    if key == 27:
+        break
+
+cv2.destroyAllWindows()
