@@ -3,6 +3,7 @@ import cv2
 import os
 
 img = cv2.imread('./data/road-signs/footpath.jpg')
+img2 = cv2.imread('./data/road-signs/left-turn.jpg')
 
 if img is None:
     print('ФАЙЛ НЕ НАЙДЕН')
@@ -10,6 +11,7 @@ if img is None:
 
 
 cv2.imshow('img', img)
+cv2.imshow('img2', img2)
 
 
 while True:
