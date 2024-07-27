@@ -6,7 +6,7 @@ cv2.namedWindow('result')
 
 ranges = {
     'min_h1': {'current': 70, 'max': 180},
-    'max_h1': {'current': 85, 'max': 180},
+    'max_h1': {'current': 82, 'max': 180},
 }
 
 
