@@ -31,6 +31,8 @@ tpl = (img.item(x, y, 0), img.item(x, y, 1), img.item(x, y, 2))
 
 print(tpl)
 
+roi = img[50:150, 20:200]
+
 
 cv2.imshow('img', img)
 while True:
