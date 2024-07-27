@@ -31,10 +31,10 @@ tpl = (img.item(x, y, 0), img.item(x, y, 1), img.item(x, y, 2))
 
 print(tpl)
 
-roi = img[50:150, 20:200]
+roi = img[0:0, :]
 
 
-cv2.imshow('img', img)
+cv2.imshow('img', roi)
 while True:
     key = cv2.waitKey(1)
     if key == 27:

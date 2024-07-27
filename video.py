@@ -7,9 +7,11 @@ cv2.namedWindow('result')
 
 while True:
     ret, frame = cap.read()
-    frameCopy = frame.copy()
+    frame_copy = frame.copy()
 
-    cv2.imshow('result', frame)
+    frame_hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+    cv2.imshow('result', frame_hsv)
 
     if cv2.waitKey(1) == 27:
         break
