@@ -4,7 +4,7 @@ import numpy as np
 import cv2
 import imutils
 
-# Ждем три секунды, успеваем переключиться на окно:
+# Ждем 2 секунды, успеваем переключиться на окно:
 print('waiting for 2 seconds...')
 time.sleep(2)
 
