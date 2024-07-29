@@ -73,7 +73,7 @@ def key_up(scan_code):
     sendInput( 1, ctypes.pointer(x), ctypes.sizeof(x) )
 
 
-def key_press(hexKeyCode, interval=0.2):
+def key_press(hexKeyCode, interval=0.02):
     key_down(hexKeyCode)
     time.sleep(interval)
     key_up(hexKeyCode)
