@@ -3,7 +3,7 @@ import time
 
 __all__ = ["key_down", "key_up", "SC_DOWN", "SC_UP", "SC_LEFT", "SC_RIGHT"]
 
-SC_LEFT =  (0x4B, True)
+SC_LEFT = (0x4B, True)
 SC_RIGHT = (0x4D, True)
 SC_UP = (0x48, True)
 SC_DOWN = (0x50, True)
@@ -65,7 +65,7 @@ def key_down(scan_code):
 
 
 def key_up(scan_code):
-    extra = ctypes.c_ulong( 0 )
+    extra = ctypes.c_ulong(0)
     ii_ = Input_I()
     code, ef = unpack_scan_code(scan_code)
     ii_.ki = KeyBdInput( 0, code, 0x0008 | 0x0002 | ef, 0, ctypes.pointer( extra ) )
@@ -73,7 +73,7 @@ def key_up(scan_code):
     sendInput( 1, ctypes.pointer(x), ctypes.sizeof(x) )
 
 
-def key_press(hexKeyCode,interval=0.2):
+def key_press(hexKeyCode, interval=0.2):
     key_down(hexKeyCode)
     time.sleep(interval)
     key_up(hexKeyCode)
