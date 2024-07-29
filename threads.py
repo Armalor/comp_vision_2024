@@ -2,24 +2,36 @@ from threading import Thread
 from time import sleep
 
 
-def func(idx):
-    for i in range(5):
-        print(f"from {'child' if idx >= 0 else 'main'} thread {idx}: {i}")
+def func(idx, status: callable = None):
+    while status is None or status() < 300:
+        if status is not None:
+            value = status()
+        else:
+            value = None
+        print(f"from {'child' if idx >= 0 else 'main'} thread {idx}: {value}")
         sleep(1)
 
+    print(f'thread {idx} finished')
 
-th = Thread(target=func, args=(1111, ))
-th.start()
+
+global_status = 211
+
+
+def my_status():
+    global global_status
+    return global_status
+
 
 ths = []
 for idx in range(5):
-    th = Thread(target=func, args=(idx,))
+    th = Thread(target=func, args=(idx, my_status))
     th.start()
     ths.append(th)
 
-func(-2)
+for st in range(10):
+    sleep(0.5)
+    global_status += 10
 
 
-th.join()
 for th in ths:
     th.join()
