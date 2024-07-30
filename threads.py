@@ -1,5 +1,6 @@
 from threading import Thread
-from time import sleep
+from time import sleep, perf_counter
+import keyboard_emu as kbe
 
 
 def func(idx, status: callable = None):
@@ -28,7 +29,13 @@ for idx in range(5):
     th.start()
     ths.append(th)
 
+t0 = perf_counter()
+kbe.key_down(kbe.SC_DOWN)
+
 for st in range(10):
+    t1 = perf_counter()
+    if t1 - t0 > 3.0:
+        kbe.key_up(kbe.SC_DOWN)
     sleep(0.5)
     global_status += 10
 

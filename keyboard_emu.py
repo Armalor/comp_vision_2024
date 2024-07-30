@@ -1,7 +1,7 @@
 import ctypes
 import time
 
-__all__ = ["key_down", "key_up", "SC_DOWN", "SC_UP", "SC_LEFT", "SC_RIGHT"]
+__all__ = ["key_down", "key_up", "key_press", "SC_DOWN", "SC_UP", "SC_LEFT", "SC_RIGHT"]
 
 SC_LEFT = (0x4B, True)
 SC_RIGHT = (0x4D, True)
@@ -56,7 +56,7 @@ def unpack_scan_code(scan_code):
 
 
 def key_down(scan_code):
-    extra = ctypes.c_ulong( 0 )
+    extra = ctypes.c_ulong(0)
     ii_ = Input_I()
     code, ef = unpack_scan_code(scan_code)
     ii_.ki = KeyBdInput( 0, code, 0x0008 | ef, 0, ctypes.pointer( extra ) )
