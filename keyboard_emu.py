@@ -14,7 +14,7 @@ sendInput = ctypes.windll.user32.SendInput
 PUL = ctypes.POINTER(ctypes.c_ulong)
 
 
-class KeyBdInput( ctypes.Structure ):
+class KeyBdInput(ctypes.Structure):
     _fields_ = [("wVk", ctypes.c_ushort),
                 ("wScan", ctypes.c_ushort),
                 ("dwFlags", ctypes.c_ulong),
@@ -22,7 +22,7 @@ class KeyBdInput( ctypes.Structure ):
                 ("dwExtraInfo", PUL)]
 
 
-class HardwareInput( ctypes.Structure ):
+class HardwareInput(ctypes.Structure):
     _fields_ = [("uMsg", ctypes.c_ulong),
                 ("wParamL", ctypes.c_short),
                 ("wParamH", ctypes.c_ushort)]
@@ -37,7 +37,7 @@ class MouseInput(ctypes.Structure):
                 ("dwExtraInfo", PUL)]
 
 
-class Input_I(ctypes.Union):
+class InputI(ctypes.Union):
     _fields_ = [("ki", KeyBdInput),
                 ("mi", MouseInput),
                 ("hi", HardwareInput)]
@@ -45,11 +45,11 @@ class Input_I(ctypes.Union):
 
 class Input(ctypes.Structure):
     _fields_ = [("type", ctypes.c_ulong),
-                ("ii", Input_I)]
+                ("ii", InputI)]
 
 
 def unpack_scan_code(scan_code):
-    if not isinstance( scan_code, tuple ):
+    if not isinstance(scan_code, tuple):
         return scan_code, 0
     else:
         return scan_code[0], 0x0001 if scan_code[1] else 0
@@ -57,26 +57,26 @@ def unpack_scan_code(scan_code):
 
 def key_down(scan_code):
     extra = ctypes.c_ulong(0)
-    ii_ = Input_I()
+    ii_ = InputI()
     code, ef = unpack_scan_code(scan_code)
-    ii_.ki = KeyBdInput( 0, code, 0x0008 | ef, 0, ctypes.pointer( extra ) )
+    ii_.ki = KeyBdInput( 0, code, 0x0008 | ef, 0, ctypes.pointer(extra))
     x = Input(ctypes.c_ulong(1), ii_ )
-    sendInput( 1, ctypes.pointer( x ), ctypes.sizeof( x ) )
+    sendInput(1, ctypes.pointer(x), ctypes.sizeof(x) )
 
 
 def key_up(scan_code):
     extra = ctypes.c_ulong(0)
-    ii_ = Input_I()
+    ii_ = InputI()
     code, ef = unpack_scan_code(scan_code)
-    ii_.ki = KeyBdInput( 0, code, 0x0008 | 0x0002 | ef, 0, ctypes.pointer( extra ) )
-    x = Input( ctypes.c_ulong( 1 ), ii_ )
-    sendInput( 1, ctypes.pointer(x), ctypes.sizeof(x) )
+    ii_.ki = KeyBdInput(0, code, 0x0008 | 0x0002 | ef, 0, ctypes.pointer(extra))
+    x = Input(ctypes.c_ulong(1), ii_)
+    sendInput( 1, ctypes.pointer(x), ctypes.sizeof(x))
 
 
-def key_press(hexKeyCode, interval=0.02):
-    key_down(hexKeyCode)
+def key_press(hex_key_code, interval=0.02):
+    key_down(hex_key_code)
     time.sleep(interval)
-    key_up(hexKeyCode)
+    key_up(hex_key_code)
 
 
 if __name__ == '__main__':

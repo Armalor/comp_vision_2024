@@ -1,0 +1,4 @@
+# python 3.10.7
+PyAutoGUI==0.9.54
+opencv-python==4.10.0.84
+imutils==0.5.4
