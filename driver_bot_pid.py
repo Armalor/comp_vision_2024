@@ -36,41 +36,36 @@ class DriverBotPID():
             self.can_drive = can_drive
         return False
 
-    def get_multiplexors(self, get_multiplexors=None) -> dict:
-        if get_multiplexors is not None:
-            self.get_multiplexors = get_multiplexors
-        return {'linear': 1.0, 'integral': 0.02, 'diff': 0.5}
-
     def run_speed(self):
 
-        while (radius := self.speed_q.get()) is not None:
+        while (angle := self.speed_q.get()) is not None:
             if self.can_drive():
-                gas = 0.15
-                sleep = gas
-                if np.absolute(radius-self.radius_prev) > np.absolute(self.radius_prev)*0.10:
-                    kbe.key_press(kbe.SC_DOWN, sleep)
-                elif np.absolute(radius-self.radius_prev) > np.absolute(self.radius_prev)*0.05:
-                    kbe.key_press(kbe.SC_UP, gas*1.5)
+                gas = 0.05
+                brake = 0.05
+                if np.absolute(angle - self.angle_prev) > 15:
+                    kbe.key_press(kbe.SC_DOWN, brake)
                 else:
                     kbe.key_press(kbe.SC_UP, gas)
 
-                time.sleep(sleep)
-                self.radius_prev = radius
+                self.angle_prev = angle
+
+    def get_multiplexors(self, get_multiplexors=None) -> dict:
+        if get_multiplexors is not None:
+            self.get_multiplexors = get_multiplexors
+        return {'linear': 1, 'integral': 0, 'diff': 0}
 
     def run_wheel(self):
+        max_ = 90
 
-        def convert(old):
-            old_min, old_max = -110, 110
-            new_min, new_max = 0.02, 0.2
+        def convert(old, _max_=max_):
+            old_min, old_max = 0, _max_
+            new_min, new_max = 0.05, 0.2
 
             old_range = old_max - old_min
             new_range = new_max - new_min
             converted = ((old - old_min) * new_range / old_range) + new_min
 
             return converted
-
-        min_ = 0
-        max_ = 0
 
         while (angle := self.wheel_q.get()) is not None:
 
@@ -88,15 +83,9 @@ class DriverBotPID():
                 self.angle_prev = angle
                 interval = koeff['linear'] * angle + self.integral + differential
 
-                if interval < min_:
-                    min_ = interval
-                    print(angle, min_)
+                abs_interval = abs(interval)
+                if abs_interval > max_:
+                    max_ = abs_interval
+                    print(f'new abs_interval: {angle} -> {interval}', )
 
-                if interval > max_:
-                    max_ = interval
-                    print(angle, max_)
-
-                if interval > 0:
-                    kbe.key_press(kbe.SC_LEFT, convert(interval))
-                elif interval < 0:
-                    kbe.key_press(kbe.SC_RIGHT, convert(interval))
+                kbe.key_press(kbe.SC_LEFT if interval > 0 else kbe.SC_RIGHT, convert(abs_interval, _max_=max_))
